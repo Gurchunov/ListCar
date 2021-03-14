@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MyFirstProject</string>
+    <string name="addBtn">Добавить</string>
+    <string name="mark">Марка</string>
+    <string name="model">Модель</string>
+    <string name="year">Год выпуска</string>
+    <string name="todo">TODO</string>
+</resources>

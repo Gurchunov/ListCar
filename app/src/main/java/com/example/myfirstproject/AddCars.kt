@@ -3,24 +3,24 @@ package com.example.myfirstproject
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.example.myfirstproject.databinding.ActivityAddCarsBinding
-import com.example.myfirstproject.databinding.ActivityMainBinding
-
 
 class AddCars : AppCompatActivity() {
 
-    val SELECT_IMAGE_CODE = 1
-    lateinit var binding: ActivityAddCarsBinding
-    var imgUri: Uri? = null
+    private val SELECT_IMAGE_CODE = 1
+    private lateinit var binding: ActivityAddCarsBinding
+    private var imgUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_cars)
+        binding = ActivityAddCarsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val model = intent.getStringExtra("EXTRA_MODEL")
         binding.addModel.setText(model)
+        imgUri = Uri.parse("@drawable/icon.jpg")
 
         binding.addSave.setOnClickListener {
             Intent().apply {

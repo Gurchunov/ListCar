@@ -6,37 +6,38 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myfirstproject.`object`.initListCar
 import com.example.myfirstproject.adapter.Adapter
 import com.example.myfirstproject.data.CarsItem
-import com.example.myfirstproject.databinding.ActivityAddCarsBinding
 import com.example.myfirstproject.databinding.ActivityMainBinding
+import java.io.FileNotFoundException
 
 
 class MainActivity : AppCompatActivity() {
 
-    val ADD_CAR_CODE = 1
-    lateinit var carAdapter: Adapter
+    private val ADD_CAR_CODE = 1
+    private lateinit var carAdapter: Adapter
 
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
 
-    var carsList = mutableListOf<CarsItem>()
+    private var carsList = mutableListOf<CarsItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initListCar(this)
+        carsList = initListCar(this)
 
         carAdapter = Adapter(carsList)
         binding.listCars.adapter = carAdapter
         binding.listCars.layoutManager = LinearLayoutManager(this)
-        binding.addBtn.setOnClickListener { btn ->
-            Intent(this, ActivityAddCarsBinding::class.java).also { newIntent ->
+        binding.addBtn.setOnClickListener {
+            Intent(this, AddCars::class.java).also { newIntent ->
                 newIntent.putExtra("EXTRA_MODEL", "Car")
                 startActivityForResult(newIntent, ADD_CAR_CODE)
             }
@@ -66,7 +67,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
     private fun uriToDrawable(imageUri: String) : Drawable {
-        val inputStream = contentResolver.openInputStream(Uri.parse(imageUri))
-        return Drawable.createFromStream(inputStream, imageUri)
+        var image = AppCompatResources.getDrawable(this, R.drawable.icon)!!
+        try {
+            val inputStream = contentResolver.openInputStream(Uri.parse(imageUri))
+            image = Drawable.createFromStream(inputStream, imageUri)
+        } catch (e: FileNotFoundException) {
+            Log.e("MainActivity", "Unable to parse image from URI: $imageUri")
+        }
+        return image
     }
 }

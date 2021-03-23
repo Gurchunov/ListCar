@@ -1,23 +1,29 @@
 package com.example.myfirstproject.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myfirstproject.R
 import com.example.myfirstproject.data.CarsItem
-import com.example.myfirstproject.databinding.ActivityAddCarsBinding
 import com.example.myfirstproject.databinding.ActivityItemViewBinding
 
 
 class Adapter(var cars: List<CarsItem>) :
-    RecyclerView.Adapter<Adapter.CarsViewHolder>(){
-    lateinit var binding: ActivityItemViewBinding
-    inner class CarsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    RecyclerView.Adapter<Adapter.CarsViewHolder>() {
+
+    inner class CarsViewHolder(private val binding: ActivityItemViewBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(car: CarsItem) {
+            binding.fieldmodel.text = car.model
+            binding.fieldMark.text = car.mark
+            binding.fieldYear.text = car.year.toString()
+            binding.fieldImage.setImageDrawable(car.img)
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarsViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_item_view, parent, false)
-        return CarsViewHolder(view)
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val carItemBinding = ActivityItemViewBinding.inflate(layoutInflater, parent, false)
+        return CarsViewHolder(carItemBinding)
     }
 
     override fun getItemCount(): Int {
@@ -25,11 +31,6 @@ class Adapter(var cars: List<CarsItem>) :
     }
 
     override fun onBindViewHolder(holder: CarsViewHolder, pos: Int) {
-        holder.itemView.apply {
-           binding.fieldmodel.text = cars[pos].model
-            binding.fieldMark.text = cars[pos].mark
-            binding.fieldYear.text = cars[pos].year.toString()
-            binding.fieldImage.setImageDrawable(cars[pos].img)
-        }
+        holder.bind(cars[pos])
     }
 }
